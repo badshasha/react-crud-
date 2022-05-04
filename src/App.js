@@ -1,23 +1,37 @@
 import logo from './logo.svg';
 import './App.css';
+import TableComponent from './components/TableComponent';
+import {useState } from 'react';
 
 function App() {
+
+  const [state,setState] = useState([]); // value is empty array 
+
+  const GetPost = () => {
+    const url = "https://localhost:7255/api/Blogger/getAll";
+    fetch(url , {
+      method : 'GET',
+    })
+    .then( (response) => response.json() )
+    .then( (data) => {
+        // console.log(data);  // testing information
+        setState(data);
+    } )
+    .catch( (error) => console.log("shavendra there is a error ") );
+
+  }
+
+
+  const deleteElement = (id) => {
+    console.log("delete working" + id);
+    let value = state.filter( obj => obj.id != id );
+    setState(value);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <button onClick={GetPost}>getInformation</button>
+       <TableComponent list={state} hi={deleteElement}/>
     </div>
   );
 }
