@@ -1,37 +1,45 @@
+import React , {useRef} from 'react'
 
-import React from 'react'
+const TableComponent = ({list,filter,search,deleteFunction}) => {
 
-const TableComponent = ({list,hi}) => {
- console.log(list);
+  const reference = useRef(null);
 
-  const deleteMethod = (id) => {
-      hi(id);
+  const deleteButton = (id) => {
+    deleteFunction(id);    
   }
-  
+
   return (
     <div>
-        <table>
+   <input type="text" placeholder='search' onChange={filter}/>
+   <input type="text" placeholder="special search" ref={reference} />
+   <button onClick={() => { search(reference.current.value) }}>special search</button>
+   <table>
+       <thead>
+           <tr>
+               <th>id</th>
+               <th>name</th>
+               <th>delete</th>
+           </tr>
+       </thead>
 
-            <tr>
-                <th>id</th>
-                <th>Name</th>
-                <th>delete</th>
-            </tr>
+       <tbody>
 
-            {/* loog information */}
+{list.map( listElement =>{
+    let {id , name} = listElement;  
+     return (        
+        <tr key={id}>
+            <td>{id}</td>
+            <td>{name}</td>
+            <td><button onClick={ () => deleteButton({id}) }>delete</button></td>
+        </tr>
+    ) 
+    })
+}
 
-            { list.map( (element) => {
-                return (
-                <tr key={element.id}>
-                    <th>{element.id}</th>
-                    <th>{element.name}</th>
-                    <button onClick={() => { deleteMethod(element.id) }}>delete</button>
-                </tr>
-                )
-            } ) }
+    
+       </tbody>
+   </table>
 
-
-        </table>
     </div>
   )
 }
